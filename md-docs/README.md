@@ -1,6 +1,6 @@
 <p align="center">
   <a href="https://github.com/U-spe/snek">
-    <img src="https://cdn-icons-png.flaticon.com/256/306/306917.png" width="128">
+    <img src="https://cdn-icons-png.flaticon.com/256/733/733609.png" width="128">
   </a>
   <a href="https://github.com/U-spe/spydr">
     <img src="https://cdn-icons-png.flaticon.com/256/733/733609.png" width="128">
