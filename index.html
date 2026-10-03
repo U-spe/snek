@@ -6,31 +6,33 @@
 
     <title>snek</title>
 
-    <link rel="stylesheet" href="/css/style.css">
+    <link rel="icon" type="image/png" href="/assets/graphics/i/logo.png">
+    <link rel="stylesheet" href="/index.css">
 </head>
 
 <body>
 
-    <!-- INTRO -->
+    <!-- ENTER SCREEN -->
     <div id="enter-screen">
         <video
             id="enter-video"
+            src="/assets/graphics/v/enter-screen.mp4"
             autoplay
             muted
             playsinline
-            preload="auto"
-        >
-            <source src="/assets/graphics/v/enter-screen.mp4" type="video/mp4">
-        </video>
+            loop
+        ></video>
 
-        <div class="enter-overlay">
+        <div class="enter-overlay"></div>
+
+        <div class="enter-content">
             <img
+                class="enter-logo"
                 src="/assets/graphics/i/logo.png"
                 alt="snek"
-                class="enter-logo"
             >
 
-            <button id="enter-button">
+            <button id="enter-button" type="button">
                 ENTER
             </button>
         </div>
@@ -38,105 +40,114 @@
 
 
     <!-- MAIN SITE -->
-    <main id="site">
+    <main id="site" class="hidden">
 
-        <nav class="topbar">
+        <!-- TOP BAR -->
+        <header class="topbar">
 
-            <a href="/" class="brand">
-                <img src="/assets/graphics/i/logo.png" alt="snek">
-            </a>
-
-            <div class="nav-links">
-                <a href="#games">games</a>
-                <a href="#apps">apps</a>
-                <a href="#about">about</a>
-            </div>
-
-        </nav>
-
-
-        <section class="hero">
-
-            <div class="hero-content">
-
-                <p class="eyebrow">WELCOME TO</p>
-
+            <div class="brand">
                 <img
                     src="/assets/graphics/i/logo.png"
                     alt="snek"
-                    class="hero-logo"
                 >
 
-                <p class="hero-description">
-                    a focused place for games, apps, and more.
-                </p>
+                <span>snek</span>
+            </div>
 
-                <div class="hero-actions">
-                    <a href="#games" class="button primary">
-                        games
-                    </a>
+            <div class="topbar-center">
+                <div class="search">
+                    <span class="search-icon">⌕</span>
 
-                    <a href="#apps" class="button">
-                        apps
-                    </a>
+                    <input
+                        id="game-search"
+                        type="text"
+                        autocomplete="off"
+                        placeholder="search games..."
+                    >
+                </div>
+            </div>
+
+            <nav class="nav">
+                <a href="#games">games</a>
+            </nav>
+
+        </header>
+
+
+        <!-- HERO / GAME HUB -->
+        <section class="hero">
+
+            <div class="hero-content">
+                <div class="eyebrow">
+                    <span class="status-dot"></span>
+                    snek
                 </div>
 
+                <h1>games.</h1>
+
+                <p>
+                    your games. one place.
+                </p>
             </div>
 
         </section>
 
 
-        <section id="games" class="section">
+        <!-- GAMES -->
+        <section id="games" class="games-section">
 
             <div class="section-heading">
-                <span>01</span>
-                <h2>games</h2>
+                <div>
+                    <span class="section-label">library</span>
+                    <h2>games</h2>
+                </div>
+
+                <span id="game-count">0 games</span>
             </div>
 
-            <div class="empty-card">
-                <p>games are coming soon.</p>
+            <div id="games-grid" class="games-grid">
+
+                <!-- Example cards.
+                     Replace/add these with your actual UBG games. -->
+
+                <a
+                    class="game-card"
+                    href="#"
+                    data-name="game"
+                >
+                    <div class="game-image">
+                        <div class="image-placeholder">
+                            SNEK
+                        </div>
+
+                        <div class="play-button">
+                            ▶
+                        </div>
+                    </div>
+
+                    <div class="game-info">
+                        <span class="game-title">game</span>
+                        <span class="game-meta">play</span>
+                    </div>
+                </a>
+
+            </div>
+
+            <div id="no-results" class="no-results hidden">
+                <span>no games found.</span>
             </div>
 
         </section>
 
 
-        <section id="apps" class="section">
-
-            <div class="section-heading">
-                <span>02</span>
-                <h2>apps</h2>
-            </div>
-
-            <div class="empty-card">
-                <p>apps are coming soon.</p>
-            </div>
-
-        </section>
-
-
-        <section id="about" class="section about">
-
-            <div class="section-heading">
-                <span>03</span>
-                <h2>about</h2>
-            </div>
-
-            <p>
-                snek is a focused web project built to stay simple,
-                organized, and fast.
-            </p>
-
-        </section>
-
-
+        <!-- SIMPLE FOOTER -->
         <footer>
-            <span>🐍 snek</span>
-            <span>built by solar / u-spe</span>
+            <span>snek</span>
+            <span>built for games.</span>
         </footer>
 
     </main>
 
-    <script src="/js/main.js"></script>
-
+    <script src="/index.js"></script>
 </body>
 </html>
