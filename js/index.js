@@ -1,4 +1,3 @@
-```javascript
 document.addEventListener("DOMContentLoaded", () => {
 
     const enterScreen = document.getElementById("enter-screen");
@@ -141,4 +140,3 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
 });
-```
