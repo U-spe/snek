@@ -1,153 +1,175 @@
+```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8">
+  <title>snek</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>snek</title>
+  <link rel="icon" type="image/png" href="/assets/graphics/i/logo.png">
 
-    <link rel="icon" type="image/png" href="/assets/graphics/i/logo.png">
-    <link rel="stylesheet" href="/css/index.css">
+  <link
+    href="https://cdn.jsdelivr.net/npm/remixicon/fonts/remixicon.css"
+    rel="stylesheet"
+  >
+
+  <link
+    href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700&family=JetBrains+Mono:wght@300;400;600&display=swap"
+    rel="stylesheet"
+  >
+
+  <link rel="stylesheet" href="/css/index.css">
 </head>
 
-<body>
+<body data-bg-style="stars">
 
-    <!-- ENTER SCREEN -->
-    <div id="enter-screen">
-        <video
-            id="enter-video"
-            src="/assets/graphics/v/enter-screen.mp4"
-            autoplay
-            muted
-            playsinline
-            loop
-        ></video>
+  <!-- =========================
+       ENTER SCREEN
+  ========================== -->
 
-        <div class="enter-overlay"></div>
+  <div id="loading-screen">
 
-        <div class="enter-content">
-            <img
-                class="enter-logo"
-                src="/assets/graphics/i/logo.png"
-                alt="snek"
-            >
+    <video
+      id="loadVideo"
+      src="/assets/graphics/v/enter-screen.mp4"
+      autoplay
+      muted
+      playsinline
+    ></video>
 
-            <button id="enter-button" type="button">
-                ENTER
-            </button>
-        </div>
+    <div class="loading-overlay"></div>
+
+    <div class="enter-content">
+      <img
+        src="/assets/graphics/i/logo.png"
+        class="enter-logo"
+        alt="snek"
+      >
+
+      <button id="enter-btn">
+        ENTER
+      </button>
+    </div>
+
+  </div>
+
+
+  <!-- =========================
+       BACKGROUND
+  ========================== -->
+
+  <div id="bg-effects-container">
+    <canvas id="stars-canvas"></canvas>
+    <div id="fog-overlay"></div>
+  </div>
+
+
+  <!-- =========================
+       APP
+  ========================== -->
+
+  <div id="app">
+
+    <!-- CLOCK -->
+    <div class="top">
+      <div id="time">--:--</div>
+      <div id="date">loading...</div>
     </div>
 
 
-    <!-- MAIN SITE -->
-    <main id="site" class="hidden">
+    <!-- MENU -->
+    <div class="menu-wrapper">
 
-        <!-- TOP BAR -->
-        <header class="topbar">
+      <button id="menu-btn" aria-label="Open menu">
+        <i class="ri-menu-line"></i>
+      </button>
 
-            <div class="brand">
-                <img
-                    src="/assets/graphics/i/logo.png"
-                    alt="snek"
-                >
+      <div id="menu">
 
-                <span>snek</span>
-            </div>
+        <button onclick="go('#games')">
+          <i class="ri-gamepad-line"></i>
+          games
+        </button>
 
-            <div class="topbar-center">
-                <div class="search">
-                    <span class="search-icon">⌕</span>
+        <button onclick="go('#games')">
+          <i class="ri-links-line"></i>
+          backup urls
+        </button>
 
-                    <input
-                        id="game-search"
-                        type="text"
-                        autocomplete="off"
-                        placeholder="search games..."
-                    >
-                </div>
-            </div>
+        <button onclick="location.reload()">
+          <i class="ri-refresh-line"></i>
+          reload
+        </button>
 
-            <nav class="nav">
-                <a href="#games">games</a>
-            </nav>
+      </div>
 
-        </header>
+    </div>
 
 
-        <!-- HERO / GAME HUB -->
-        <section class="hero">
+    <!-- HERO -->
+    <div class="center">
 
-            <div class="hero-content">
-                <div class="eyebrow">
-                    <span class="status-dot"></span>
-                    snek
-                </div>
+      <div class="hero-wrap">
 
-                <h1>games.</h1>
+        <img
+          src="/assets/graphics/i/logo.png"
+          class="logo-img"
+          alt="snek logo"
+        >
 
-                <p>
-                    your games. one place.
-                </p>
-            </div>
+        <div class="hero-text">
 
-        </section>
+          <h1>snek</h1>
 
+          <div class="const" id="constText">
+            backup mode: activated
+          </div>
 
-        <!-- GAMES -->
-        <section id="games" class="games-section">
+        </div>
 
-            <div class="section-heading">
-                <div>
-                    <span class="section-label">library</span>
-                    <h2>games</h2>
-                </div>
+      </div>
 
-                <span id="game-count">0 games</span>
-            </div>
-
-            <div id="games-grid" class="games-grid">
-
-                <!-- Example cards.
-                     Replace/add these with your actual UBG games. -->
-
-                <a
-                    class="game-card"
-                    href="#"
-                    data-name="game"
-                >
-                    <div class="game-image">
-                        <div class="image-placeholder">
-                            SNEK
-                        </div>
-
-                        <div class="play-button">
-                            ▶
-                        </div>
-                    </div>
-
-                    <div class="game-info">
-                        <span class="game-title">game</span>
-                        <span class="game-meta">play</span>
-                    </div>
-                </a>
-
-            </div>
-
-            <div id="no-results" class="no-results hidden">
-                <span>no games found.</span>
-            </div>
-
-        </section>
+    </div>
 
 
-        <!-- SIMPLE FOOTER -->
-        <footer>
-            <span>snek</span>
-            <span>built for games.</span>
-        </footer>
+    <!-- GAME / BACKUP BUTTONS -->
+    <div class="games" id="games">
 
-    </main>
+      <button
+        class="game-card"
+        onclick="window.location.href='https://dns2.webcreationstudios.org'"
+      >
+        backup url #1
+      </button>
 
-    <script src="/js/index.js"></script>
+      <button
+        class="game-card"
+        onclick="window.location.href='https://madeby.thegoat.webcreationstudios.org'"
+      >
+        backup url #2
+      </button>
+
+      <button
+        class="game-card"
+        onclick="window.location.href='https://dns1.mjevents.org'"
+      >
+        backup url #3
+      </button>
+
+      <button
+        class="game-card"
+        onclick="window.location.href='https://madeby.thegoat.mjevents.org'"
+      >
+        backup url #4
+      </button>
+
+    </div>
+
+  </div>
+
+
+  <script src="/js/index.js"></script>
+
 </body>
 </html>
+```
