@@ -1,142 +1,353 @@
-document.addEventListener("DOMContentLoaded", () => {
-
-    const enterScreen = document.getElementById("enter-screen");
-    const enterVideo = document.getElementById("enter-video");
-    const enterButton = document.getElementById("enter-button");
-
-    const site = document.getElementById("site");
-
-    const searchInput = document.getElementById("game-search");
-    const gamesGrid = document.getElementById("games-grid");
-    const noResults = document.getElementById("no-results");
-    const gameCount = document.getElementById("game-count");
+// =========================================================
+// SNEK // MAIN JS
+// =========================================================
 
 
-    /*
-     * ENTER SCREEN
-     */
+// =========================================================
+// CLOCK
+// =========================================================
 
-    function enterSnek() {
-        if (enterScreen.classList.contains("exit")) {
-            return;
-        }
+function updateClock() {
+  const now = new Date();
 
-        enterScreen.classList.add("exit");
+  const timeEl = document.getElementById("time");
+  const dateEl = document.getElementById("date");
 
-        if (enterVideo) {
-            enterVideo.pause();
-            enterVideo.currentTime = 0;
-        }
+  if (timeEl) {
+    timeEl.textContent = now.toLocaleTimeString([], {
+      hour: "2-digit",
+      minute: "2-digit",
+      second: "2-digit"
+    });
+  }
 
-        setTimeout(() => {
-            enterScreen.remove();
-            site.classList.remove("hidden");
+  if (dateEl) {
+    dateEl.textContent = now.toDateString();
+  }
+}
 
-            window.dispatchEvent(new Event("resize"));
-        }, 700);
+setInterval(updateClock, 1000);
+updateClock();
+
+
+// =========================================================
+// SNEK CONST TEXT
+// =========================================================
+
+const lines = [
+  "backup mode: activated",
+  "single handedly saving the school year",
+  "look who's back...",
+  "damn school wifi again",
+  "slow ahh wifi",
+  "snek is online",
+  "one path. one hub.",
+  "games go brrrr",
+  "you found the backup",
+  "at this point, i don't even know",
+  "this one loaded properly",
+  "made by cj the goat, right?",
+  "what are you still doing here???",
+  "we're so back",
+  "snek.exe has entered the chat"
+];
+
+const constText = document.getElementById("constText");
+
+let lineIndex = 0;
+
+setInterval(() => {
+  if (!constText) return;
+
+  constText.style.opacity = "0";
+
+  setTimeout(() => {
+    constText.textContent = lines[lineIndex];
+
+    lineIndex++;
+
+    if (lineIndex >= lines.length) {
+      lineIndex = 0;
     }
 
-    enterButton.addEventListener("click", enterSnek);
+    constText.style.opacity = "1";
+  }, 220);
+
+}, 2400);
 
 
-    document.addEventListener("keydown", (event) => {
-        if (
-            event.key === "Enter" ||
-            event.code === "Space"
-        ) {
-            if (!enterScreen.classList.contains("exit")) {
-                event.preventDefault();
-                enterSnek();
-            }
-        }
+// =========================================================
+// ENTER SCREEN
+// =========================================================
+
+const INTRO_TIME = 5000;
+
+window.addEventListener("load", () => {
+
+  const loading = document.getElementById("loading-screen");
+  const video = document.getElementById("loadVideo");
+  const app = document.getElementById("app");
+  const enterBtn = document.getElementById("enter-btn");
+
+  let done = false;
+
+  function finish() {
+
+    if (done) return;
+
+    done = true;
+
+    if (video) {
+      video.pause();
+    }
+
+    if (loading) {
+      loading.classList.add("hidden");
+    }
+
+    setTimeout(() => {
+
+      if (app) {
+        app.classList.add("ready");
+      }
+
+    }, 350);
+  }
+
+
+  if (enterBtn) {
+    enterBtn.addEventListener("click", finish);
+  }
+
+
+  if (video) {
+    video.addEventListener("ended", finish);
+  }
+
+
+  // Automatic fallback if the video takes too long.
+  setTimeout(finish, INTRO_TIME);
+});
+
+
+// =========================================================
+// NAVIGATION
+// =========================================================
+
+function go(page) {
+
+  if (page.startsWith("#")) {
+
+    const target = document.querySelector(page);
+
+    if (target) {
+      target.scrollIntoView({
+        behavior: "smooth"
+      });
+    }
+
+    return;
+  }
+
+  document.body.style.opacity = "0";
+
+  setTimeout(() => {
+    window.location.href = page;
+  }, 350);
+}
+
+
+// =========================================================
+// MENU BEHAVIOR
+// =========================================================
+
+if (!window.__snekMenuInit) {
+
+  window.__snekMenuInit = true;
+
+  const menu = document.getElementById("menu");
+  const btn = document.getElementById("menu-btn");
+  const wrapper = document.querySelector(".menu-wrapper");
+
+  let closeTimer = null;
+  let locked = false;
+
+
+  if (btn && menu && wrapper) {
+
+    btn.addEventListener("click", (event) => {
+
+      event.stopPropagation();
+
+      locked = !locked;
+
+      if (locked) {
+        menu.classList.add("open");
+      } else {
+        menu.classList.remove("open");
+      }
+
     });
 
 
-    /*
-     * GAME SEARCH
-     */
+    wrapper.addEventListener("mouseenter", () => {
 
-    function getGames() {
-        return Array.from(
-            gamesGrid.querySelectorAll(".game-card")
-        );
-    }
+      clearTimeout(closeTimer);
 
-    function updateGameCount(amount) {
-        gameCount.textContent =
-            `${amount} ${amount === 1 ? "game" : "games"}`;
-    }
-
-    function filterGames() {
-
-        const query =
-            searchInput.value
-                .trim()
-                .toLowerCase();
-
-        const games = getGames();
-
-        let visible = 0;
-
-        games.forEach((game) => {
-
-            const name =
-                (
-                    game.dataset.name ||
-                    game.querySelector(".game-title")?.textContent ||
-                    ""
-                ).toLowerCase();
-
-            const matches =
-                !query ||
-                name.includes(query);
-
-            game.style.display =
-                matches ? "" : "none";
-
-            if (matches) {
-                visible++;
-            }
-        });
-
-        updateGameCount(visible);
-
-        noResults.classList.toggle(
-            "hidden",
-            visible !== 0
-        );
-    }
-
-    searchInput.addEventListener(
-        "input",
-        filterGames
-    );
-
-
-    /*
-     * INITIAL COUNT
-     */
-
-    updateGameCount(
-        getGames().length
-    );
-
-
-    /*
-     * ESCAPE = CLEAR SEARCH
-     */
-
-    document.addEventListener("keydown", (event) => {
-
-        if (event.key === "Escape") {
-
-            if (document.activeElement === searchInput) {
-                searchInput.value = "";
-                filterGames();
-                searchInput.blur();
-            }
-        }
+      menu.classList.add("open");
 
     });
+
+
+    wrapper.addEventListener("mouseleave", () => {
+
+      if (locked) return;
+
+      closeTimer = setTimeout(() => {
+
+        menu.classList.remove("open");
+
+      }, 180);
+
+    });
+
+
+    document.addEventListener("click", (event) => {
+
+      if (!wrapper.contains(event.target)) {
+
+        locked = false;
+
+        menu.classList.remove("open");
+
+      }
+
+    });
+
+  }
+
+}
+
+
+// =========================================================
+// STARS
+// =========================================================
+
+const canvas = document.getElementById("stars-canvas");
+
+if (canvas) {
+
+  const ctx = canvas.getContext("2d");
+
+  let stars = [];
+
+  function resizeCanvas() {
+
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    createStars();
+
+  }
+
+
+  function createStars() {
+
+    const amount =
+      Math.min(
+        180,
+        Math.floor(
+          (window.innerWidth * window.innerHeight) / 9000
+        )
+      );
+
+    stars = [];
+
+    for (let i = 0; i < amount; i++) {
+
+      stars.push({
+        x: Math.random() * canvas.width,
+        y: Math.random() * canvas.height,
+
+        size: Math.random() * 1.4 + 0.2,
+
+        speed:
+          Math.random() * 0.12 + 0.025,
+
+        opacity:
+          Math.random() * 0.65 + 0.15
+      });
+
+    }
+
+  }
+
+
+  function drawStars() {
+
+    ctx.clearRect(
+      0,
+      0,
+      canvas.width,
+      canvas.height
+    );
+
+    for (const star of stars) {
+
+      ctx.beginPath();
+
+      ctx.fillStyle =
+        `rgba(255,255,255,${star.opacity})`;
+
+      ctx.arc(
+        star.x,
+        star.y,
+        star.size,
+        0,
+        Math.PI * 2
+      );
+
+      ctx.fill();
+
+      star.y -= star.speed;
+
+      if (star.y < -5) {
+        star.y = canvas.height + 5;
+        star.x = Math.random() * canvas.width;
+      }
+
+    }
+
+    requestAnimationFrame(drawStars);
+
+  }
+
+
+  window.addEventListener(
+    "resize",
+    resizeCanvas
+  );
+
+  resizeCanvas();
+  drawStars();
+
+}
+
+
+// =========================================================
+// KEYBOARD SHORTCUT
+// =========================================================
+
+document.addEventListener("keydown", (event) => {
+
+  if (event.key === "Escape") {
+
+    const menu = document.getElementById("menu");
+
+    if (menu) {
+      menu.classList.remove("open");
+    }
+
+  }
 
 });
